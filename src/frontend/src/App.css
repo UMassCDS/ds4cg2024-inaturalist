@@ -93,6 +93,9 @@ body {
 #clear_annotation {
   background-color: #dc3545;
 }
+#show_grid {
+  background-color: #dc35aa;
+}
 
 #map {
   flex-grow: 1;

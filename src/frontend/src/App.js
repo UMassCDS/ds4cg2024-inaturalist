@@ -43,11 +43,39 @@ function App() {
     });
   };
 
+  const generateHexagons = () => {
+    const formData = {
+      taxa_name: formRefs.taxaName.current.value,
+      hexResolution: Number(formRefs.hexResolution.current.value),
+      threshold: Number(formRefs.threshold.current.value),
+      model: formRefs.model.current.value,
+      disable_ocean_mask: formRefs.disableOceanMask.current.checked,
+    };
+
+    fetch('/generate_prediction/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Prediction generated:', data);
+      if (data.hull_points) {
+        setHullPoints(data.hull_points);
+      }
+    })
+    .catch(error => {
+      console.error('Error generating prediction:', error);
+    });
+  };
+
   return (
     <div className="app-container">
       <Sidebar ref={formRefs} />
       <div className="main-content">
-        <Buttons onGeneratePrediction={handleGeneratePrediction} />
+        <Buttons onGeneratePrediction={handleGeneratePrediction} onDisplayHexagons={generateHexagons} />
         <Map hullPoints={hullPoints} />
       </div>
     </div>
