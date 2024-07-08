@@ -4,6 +4,10 @@ import Sidebar from "./components/Sidebar";
 import Buttons from "./components/Buttons";
 import "./App.css";
 
+function onSaveAnnotation(selectedHexagons) {
+  console.log(JSON.stringify({ h3: Array.from(selectedHexagons) }));
+}
+
 function App() {
   const formRefs = {
     taxaName: useRef(null),
@@ -13,6 +17,7 @@ function App() {
   };
 
   const [hullPoints, setHullPoints] = useState(null);
+  const [selectedHexagons, setSelectedHexagons] = useState(new Set());
 
   const handleGeneratePrediction = () => {
     const formData = {
@@ -22,8 +27,8 @@ function App() {
       disable_ocean_mask: formRefs.disableOceanMask.current.checked,
     };
 
-    fetch('http://localhost:8000/generate_prediction/', {
-      method: 'POST',
+    fetch("http://localhost:8000/generate_prediction/", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -45,8 +50,15 @@ function App() {
     <div className="app-container">
       <Sidebar ref={formRefs} />
       <div className="main-content">
-        <Buttons onGeneratePrediction={handleGeneratePrediction} />
-        <Map hullPoints={hullPoints} />
+        <Buttons
+          onGeneratePrediction={handleGeneratePrediction}
+          onSaveAnnotation={() => onSaveAnnotation(selectedHexagons)}
+        />
+        <Map
+          hullPoints={hullPoints}
+          selectedHexagons={selectedHexagons}
+          setSelectedHexagons={setSelectedHexagons}
+        />
       </div>
     </div>
   );

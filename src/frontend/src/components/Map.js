@@ -9,10 +9,10 @@ import {
 import "leaflet/dist/leaflet.css";
 import * as h3 from "h3-js/legacy";
 
-const SelectedHexagonLayer = () => {
+const SelectedHexagonLayer = ({ hexagons, setHexagons }) => {
   // Layer for colored hexagons
   const map = useMap();
-  const [hexagons, setHexagons] = useState(new Set());
+  // const [hexagons, setHexagons] = useState(new Set());
   const resolution = 5;
 
   const addHex = (id) => {
@@ -117,7 +117,7 @@ const PredictionPolygon = ({ hullPoints }) => {
 };
 
 // Main Map Component
-const Map = ({ hullPoints }) => {
+const Map = ({ hullPoints, selectedHexagons, setSelectedHexagons }) => {
   return (
     <MapContainer
       center={[39, 34]}
@@ -166,7 +166,10 @@ const Map = ({ hullPoints }) => {
 
         {/* Render the Selected Hexagon Layer */}
         <LayersControl.Overlay checked name="Select Hexagon Grid">
-          <SelectedHexagonLayer />
+          <SelectedHexagonLayer
+            hexagons={selectedHexagons}
+            setHexagons={setSelectedHexagons}
+          />
         </LayersControl.Overlay>
       </LayersControl>
     </MapContainer>
