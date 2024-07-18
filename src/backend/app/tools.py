@@ -104,7 +104,7 @@ def save_annotation(data):
     with open(f"{directory}/{taxa_name}.json", "w") as f:
         json.dump(annotation_hexagon_ids, f)
     print(f"Saving annotation for {taxa_name}.")
-    return {"annotation_hexagon_ids": annotation_hexagon_ids}
+    return {"annotation_hexagon_ids": annotation_hexagon_ids}, int(taxa_name.split("(")[-1][:-1])
 
 
 def load_annotation(data):

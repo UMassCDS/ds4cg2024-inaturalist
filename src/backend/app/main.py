@@ -1,11 +1,24 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from . import tools
+from . import tools, models
+
+
+from database import engine, SessionLocal
+from sqlalchemy.orm import Session
 
 
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
+
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+    
 
 origins = ["http://localhost:3000"]
 
@@ -24,6 +37,10 @@ async def generate_prediction(request: Request):
     return JSONResponse(content=response)
 
 @app.post("/save_annotation/")
-async def save_annotation(request: Request):
+async def save_annotation(request: Request, db : Session = Depends(get_db)):
     response = tools.save_annotation(await request.json())
+    annotation_model = models.Annotation()
+    annotation_model.taxa_id=response[1]
+    db.add(annotation_model)
+    db.commit()
     return JSONResponse(content=response)
