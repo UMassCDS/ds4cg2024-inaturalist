@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from . import tools, models
 
 
-from database import engine, SessionLocal
+from src.backend.app.database import engine, SessionLocal
 from sqlalchemy.orm import Session
 
 
