@@ -7,7 +7,7 @@ from . import tools, models
 
 from src.backend.app.database import engine, SessionLocal
 from sqlalchemy.orm import Session
-
+from datetime import datetime
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -40,7 +40,8 @@ async def generate_prediction(request: Request):
 async def save_annotation(request: Request, db : Session = Depends(get_db)):
     response = tools.save_annotation(await request.json())
     annotation_model = models.Annotation()
-    annotation_model.taxa_id=response[1]
+    annotation_model.TaxaID=response[1]
+    annotation_model.CreatedAt= datetime.now()
     db.add(annotation_model)
     db.commit()
     return JSONResponse(content=response)
