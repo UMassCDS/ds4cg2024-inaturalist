@@ -90,20 +90,19 @@ def generate_prediction(eval_params):
         hull_points=hull_points,
         prediction_hexagon_ids=prediction_hexagon_ids,
         # If there are no saved annotations, set prediction_hexagon_ids as the starting point for the annotation
-        annotation_hexagon_ids=saved_annotation["annotation_hexagon_ids"]
-        or prediction_hexagon_ids,
+        annotation_hexagon_ids=prediction_hexagon_ids,
     )
 
 
 def save_annotation(data):
     taxa_name = data["taxa_name"]
     annotation_hexagon_ids = data["annotation_hexagon_ids"]
-    directory = "annotations"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    with open(f"{directory}/{taxa_name}.json", "w") as f:
-        json.dump(annotation_hexagon_ids, f)
-    print(f"Saving annotation for {taxa_name}.")
+    # directory = "annotations"
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
+    # with open(f"{directory}/{taxa_name}.json", "w") as f:
+    #     json.dump(annotation_hexagon_ids, f)
+    # print(f"Saving annotation for {taxa_name}.")
     return {"annotation_hexagon_ids": annotation_hexagon_ids}, int(taxa_name.split("(")[-1][:-1])
 
 

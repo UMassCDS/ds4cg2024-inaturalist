@@ -44,4 +44,14 @@ async def save_annotation(request: Request, db : Session = Depends(get_db)):
     annotation_model.CreatedAt= datetime.now()
     db.add(annotation_model)
     db.commit()
+
+    hex_indexes=response[0]['annotation_hexagon_ids']
+    for hex_index in hex_indexes:
+        hexagon_model = models.AnnotationHexagon()
+        hexagon_model.AnnotationID = annotation_model.AnnotationID
+        hexagon_model.HexID = hex_index
+        db.add(hexagon_model)
+    db.commit()
+    
+
     return JSONResponse(content=response)
